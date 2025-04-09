@@ -1,0 +1,58 @@
+{
+  "features": [
+    {
+      "id": 1,
+      "title": "Add dark mode",
+      "likes": 0,
+      "createdAt": "2025-04-09T07:35:24.913Z"
+    },
+    {
+      "id": 2,
+      "title": "Improve search speed",
+      "likes": 0,
+      "createdAt": "2025-04-09T07:35:24.917Z"
+    },
+    {
+      "id": 3,
+      "title": "Better mobile support",
+      "likes": 0,
+      "createdAt": "2025-04-09T07:35:24.917Z"
+    },
+    {
+      "id": 4,
+      "title": "Add keyboard shortcuts",
+      "likes": 0,
+      "createdAt": "2025-04-09T07:35:24.917Z"
+    },
+    {
+      "id": 5,
+      "title": "Improve accessibility",
+      "likes": 0,
+      "createdAt": "2025-04-09T07:35:24.917Z"
+    },
+    {
+      "id": 6,
+      "title": "Add custom themes",
+      "likes": 0,
+      "createdAt": "2025-04-09T07:35:24.917Z"
+    },
+    {
+      "id": 7,
+      "title": "Integrate with third-party APIs",
+      "likes": 0,
+      "createdAt": "2025-04-09T07:35:24.917Z"
+    },
+    {
+      "id": 8,
+      "title": "Add user profiles",
+      "likes": 0,
+      "createdAt": "2025-04-09T07:35:24.917Z"
+    },
+    {
+      "id": 9,
+      "title": "Implement backend test",
+      "likes": 0,
+      "createdAt": "2025-04-09T07:35:48.874Z"
+    }
+  ]
+}

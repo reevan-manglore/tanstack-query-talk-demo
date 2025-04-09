@@ -1,0 +1,45 @@
+# Ensure all text files use LF line endings
+* text eol=lf
+
+# Exclude certain file types (binary assets) from line ending normalization
+*.svg binary
+*.jpg binary
+*.jpeg binary
+*.png binary
+*.gif binary
+*.webp binary
+*.bmp binary
+*.ico binary
+*.tiff binary
+*.eps binary
+*.psd binary
+*.ai binary
+*.pdf binary
+*.zip binary
+*.tar.gz binary
+*.tar.bz2 binary
+*.tar.xz binary
+*.7z binary
+*.rar binary
+*.gz binary
+*.xz binary
+*.flac binary
+*.mp3 binary
+*.wav binary
+*.ogg binary
+*.mkv binary
+*.mp4 binary
+*.mov binary
+*.avi binary
+*.webm binary
+*.ttf binary
+*.otf binary    
+*.woff binary   
+*.woff2 binary  
+*.eot binary    
+*.pfb binary    
+*.pfa binary    
+*.fnt binary   
+*.otc binary    
+*.woff binary   
+*.woff2 binary  
