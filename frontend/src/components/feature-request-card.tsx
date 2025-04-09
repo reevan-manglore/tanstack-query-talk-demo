@@ -9,11 +9,12 @@ import {
   CardHeader,
   CardTitle,
 } from '~/components/ui/card';
+import { Shimmer } from '~/components/ui/shimmer';
 
 import { formatDate } from '~/lib/utils';
 
 export interface FeatureRequest {
-  id: string;
+  id: number;
   title: string;
   likes: number;
   createdAt: string;
@@ -82,5 +83,35 @@ function LikeButton({ initialLikes, isLoading = false }: LikeButtonProps) {
         </>
       )}
     </Button>
+  );
+}
+
+export function FeatureRequestSkeleton() {
+  return (
+    <Card>
+      <div className="flex">
+        <div className="flex flex-col items-center justify-start p-4 border-r">
+          <Shimmer className="h-12 w-8 rounded-md bg-gray-200" />
+        </div>
+        <div className="flex-1">
+          <div className="p-6 pb-3">
+            <div className="flex items-center justify-between">
+              <div className="space-y-2">
+                <Shimmer className="h-6 w-48 rounded-md bg-gray-200" />
+                <Shimmer className="h-4 w-32 rounded-md bg-gray-200" />
+              </div>
+              <Shimmer className="h-8 w-8 rounded-full bg-gray-200" />
+            </div>
+          </div>
+          <div className="px-6 py-3">
+            <Shimmer className="h-4 w-full rounded-md bg-gray-200 mb-2" />
+            <Shimmer className="h-4 w-3/4 rounded-md bg-gray-200" />
+          </div>
+          <div className="px-6 py-3 border-t">
+            <Shimmer className="h-4 w-24 rounded-md bg-gray-200" />
+          </div>
+        </div>
+      </div>
+    </Card>
   );
 }
