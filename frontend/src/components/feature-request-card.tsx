@@ -10,8 +10,17 @@ import {
   CardTitle,
 } from '~/components/ui/card';
 import { Shimmer } from '~/components/ui/shimmer';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { formatDate } from '~/lib/utils';
+
+import {
+  FeatureResponse,
+  getFeatureById,
+  StandardResponse,
+  toggleLikeFeature,
+} from '~/services/api-service';
+import { toast } from 'sonner';
 
 export interface FeatureRequest {
   id: number;
@@ -49,19 +58,67 @@ interface LikeButtonProps {
 }
 
 function LikeButton({ id }: LikeButtonProps) {
-  const [isLiked, setIsLiked] = useState(false);
-  const isLoading = false;
+  const { data: feature, isLoading } = useQuery({
+    queryKey: ['feature-requests', id],
+    queryFn: async () => {
+      return getFeatureById(id);
+    },
+  });
+  const queryClient = useQueryClient();
+
+  const { mutate } = useMutation({
+    mutationFn: (isLiked: boolean) => toggleLikeFeature(id, isLiked),
+    onMutate: async (isLiked) => {
+      await queryClient.cancelQueries({
+        queryKey: ['feature-requests'],
+      });
+      const previousFeature = queryClient.getQueryData<
+        StandardResponse<FeatureResponse>
+      >(['feature-requests', id]);
+
+      if (!previousFeature || !previousFeature.data?.feature) return;
+
+      queryClient.setQueryData<StandardResponse<FeatureResponse>>(
+        ['feature-requests', id],
+        () => {
+          return {
+            ...previousFeature,
+            data: {
+              feature: {
+                ...(previousFeature.data as unknown as FeatureResponse).feature,
+                liked: isLiked,
+              },
+            },
+          };
+        }
+      );
+      return { previousFeature };
+    },
+    onError: (_, __, context) => {
+      toast.error('Error liking feature request');
+      if (!context) return;
+      queryClient.setQueryData(
+        ['feature-requests', id],
+        context.previousFeature
+      );
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['feature-requests', id],
+      });
+    },
+  });
 
   function handleLikeToggle() {
-    const newLikedState = !isLiked;
-    setIsLiked(newLikedState);
+    const newLikedState = !(feature?.data?.feature.liked ?? false);
+    mutate(newLikedState);
   }
 
   return (
     <Button
       variant="ghost"
       size="sm"
-      className={`flex flex-col gap-1 h-auto ${isLiked ? 'text-primary' : ''}`}
+      className={`flex flex-col gap-1 h-auto ${feature?.data?.feature.liked ? 'text-primary' : ''}`}
       onClick={handleLikeToggle}
       disabled={isLoading}
     >
@@ -71,7 +128,9 @@ function LikeButton({ id }: LikeButtonProps) {
         </>
       ) : (
         <>
-          <Heart className={`h-5 w-5 ${isLiked ? 'fill-primary' : ''}`} />
+          <Heart
+            className={`h-5 w-5 ${feature?.data?.feature.liked ? 'fill-primary' : ''}`}
+          />
         </>
       )}
     </Button>

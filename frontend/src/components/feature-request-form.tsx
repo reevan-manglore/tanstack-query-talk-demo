@@ -2,6 +2,8 @@ import type React from 'react';
 
 import { useState } from 'react';
 import { Button } from '~/components/ui/button';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
 import {
   Card,
   CardContent,
@@ -13,17 +15,30 @@ import {
 import { Input } from '~/components/ui/input';
 import { Label } from '~/components/ui/label';
 
+import { createFeature } from '~/services/api-service';
+import { toast } from 'sonner';
+
 function FeatureRequestForm() {
   const [title, setTitle] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const queryClient = useQueryClient();
+
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: createFeature,
+    onError: (error) => {
+      toast.error(
+        'An error occurred while submitting your request. Please try again.'
+      );
+    },
+    onSuccess: () => {
+      toast.success('Feature request submitted successfully!');
+      queryClient.invalidateQueries({ queryKey: ['feature-requests'] });
+      setTitle('');
+    },
+  });
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setIsSubmitting(true);
-    setTimeout(() => {
-      setTitle('');
-      setIsSubmitting(false);
-    }, 3000);
+    mutateAsync(title);
   }
 
   return (
@@ -48,8 +63,8 @@ function FeatureRequestForm() {
           </div>
         </CardContent>
         <CardFooter>
-          <Button type="submit" className="w-full my-4" disabled={isSubmitting}>
-            {isSubmitting ? 'Submitting...' : 'Submit Request'}
+          <Button type="submit" className="w-full my-4" disabled={isPending}>
+            {isPending ? 'Submitting...' : 'Submit Request'}
           </Button>
         </CardFooter>
       </form>
