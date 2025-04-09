@@ -10,49 +10,49 @@ const defaultData = {
     {
       id: 1,
       title: "Add dark mode",
-      likes: 0,
+      liked: false,
       createdAt: new Date().toISOString(),
     },
     {
       id: 2,
       title: "Improve search speed",
-      likes: 0,
+      liked: false,
       createdAt: new Date().toISOString(),
     },
     {
       id: 3,
       title: "Better mobile support",
-      likes: 0,
+      liked: false,
       createdAt: new Date().toISOString(),
     },
     {
       id: 4,
       title: "Add keyboard shortcuts",
-      likes: 0,
+      liked: false,
       createdAt: new Date().toISOString(),
     },
     {
       id: 5,
       title: "Improve accessibility",
-      likes: 0,
+      liked: false,
       createdAt: new Date().toISOString(),
     },
     {
       id: 6,
       title: "Add custom themes",
-      likes: 0,
+      liked: false,
       createdAt: new Date().toISOString(),
     },
     {
       id: 7,
       title: "Integrate with third-party APIs",
-      likes: 0,
+      liked: false,
       createdAt: new Date().toISOString(),
     },
     {
       id: 8,
       title: "Add user profiles",
-      likes: 0,
+      liked: false,
       createdAt: new Date().toISOString(),
     },
   ],
@@ -156,7 +156,7 @@ app.post("/features", async (req, res) => {
   const newFeature = {
     id: db.data.features.length + 1,
     title,
-    likes: 0,
+    liked: false,
     createdAt: new Date().toISOString(),
   };
 
@@ -186,15 +186,11 @@ app.put("/features/:id/toggle-like", async (req, res) => {
       .json(standardResponse(false, null, "Feature not found"));
   }
 
-  // Get the current liked state from the request body
+  // Get the liked state from the request body
   const { liked } = req.body;
 
-  // If liked is true, increment likes, otherwise decrement (but not below 0)
-  if (liked) {
-    feature.likes += 1;
-  } else {
-    feature.likes = Math.max(0, feature.likes - 1);
-  }
+  // Set the liked state directly
+  feature.liked = liked;
 
   await db.write();
   res.json(

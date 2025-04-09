@@ -2,7 +2,7 @@
 export interface Feature {
   id: number;
   title: string;
-  likes: number;
+  liked: boolean;
   createdAt: string;
 }
 
