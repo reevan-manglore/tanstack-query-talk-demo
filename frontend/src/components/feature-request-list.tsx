@@ -1,3 +1,5 @@
+import { useAutoAnimate } from '@formkit/auto-animate/react';
+
 import { cn } from '~/lib/utils';
 import FeatureRequestCard, {
   FeatureRequestSkeleton,
@@ -54,8 +56,11 @@ const featureRequests = [
   },
 ];
 function FeatureRequestList() {
+  const [parentref] = useAutoAnimate({ easing: 'ease-out' });
+
   return (
     <div
+      ref={parentref}
       className={cn(
         'grid grid-cols-1 mt-4 space-y-4 max-h-full overflow-y-auto'
       )}
