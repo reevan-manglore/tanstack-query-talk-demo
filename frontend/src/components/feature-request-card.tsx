@@ -16,7 +16,7 @@ import { formatDate } from '~/lib/utils';
 export interface FeatureRequest {
   id: number;
   title: string;
-  likes: number;
+
   createdAt: string;
 }
 
@@ -29,7 +29,7 @@ export default function FeatureRequestCard({
     <Card>
       <div className="flex">
         <div className="flex flex-col items-center justify-start p-4 border-r">
-          <LikeButton initialLikes={request.likes} />
+          <LikeButton id={request.id} />
         </div>
         <div className="flex-1">
           <CardHeader>
@@ -45,22 +45,16 @@ export default function FeatureRequestCard({
 }
 
 interface LikeButtonProps {
-  initialLikes: number;
-  isLoading?: boolean;
+  id: number;
 }
 
-function LikeButton({ initialLikes, isLoading = false }: LikeButtonProps) {
+function LikeButton({ id }: LikeButtonProps) {
   const [isLiked, setIsLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(initialLikes);
+  const isLoading = false;
 
   function handleLikeToggle() {
-    if (isLoading) return;
-
     const newLikedState = !isLiked;
     setIsLiked(newLikedState);
-    setLikeCount((prevCount) =>
-      newLikedState ? prevCount + 1 : prevCount - 1
-    );
   }
 
   return (
@@ -74,12 +68,10 @@ function LikeButton({ initialLikes, isLoading = false }: LikeButtonProps) {
       {isLoading ? (
         <>
           <div className="h-5 w-5 rounded-full bg-gray-400 animate-pulse" />
-          <div className="h-4 w-4 rounded bg-gray-400 animate-pulse" />
         </>
       ) : (
         <>
           <Heart className={`h-5 w-5 ${isLiked ? 'fill-primary' : ''}`} />
-          <span className="text-sm font-medium">{likeCount}</span>
         </>
       )}
     </Button>
