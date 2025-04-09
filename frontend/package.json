@@ -11,6 +11,7 @@
     "format": "prettier --write src/**/*.{ts,tsx,js,jsx,json,css,,cjs,mjs,md} --ignore-unknown --no-error-on-unmatched-pattern"
   },
   "dependencies": {
+    "@formkit/auto-animate": "0.8.2",
     "@radix-ui/react-avatar": "1.1.4",
     "@radix-ui/react-label": "2.1.2",
     "@radix-ui/react-slot": "1.1.2",

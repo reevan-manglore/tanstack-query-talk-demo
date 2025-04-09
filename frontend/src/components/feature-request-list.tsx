@@ -1,6 +1,7 @@
-import type React from 'react';
 import { cn } from '~/lib/utils';
-import FeatureRequestCard from '~/components/feature-request-card';
+import FeatureRequestCard, {
+  FeatureRequestSkeleton,
+} from '~/components/feature-request-card';
 
 const featureRequests = [
   {
@@ -67,3 +68,21 @@ function FeatureRequestList() {
 }
 
 export default FeatureRequestList;
+
+export function FeatureRequestLoading() {
+  return (
+    <div className="max-h-full overflow-y-auto">
+      {Array.from({ length: 5 }).map((_, index) => (
+        <FeatureRequestSkeleton key={index} />
+      ))}
+    </div>
+  );
+}
+
+export function FeatureRequestError({ error }: { error: string }) {
+  <div
+    className={cn('grid grid-cols-1 mt-4 space-y-4 max-h-full overflow-y-auto')}
+  >
+    <p className="text-red-500 text-center">{error}</p>
+  </div>;
+}
