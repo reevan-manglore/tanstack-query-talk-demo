@@ -1,6 +1,8 @@
 import type React from 'react';
 
 import { useState } from 'react';
+import { useNavigate } from 'react-router';
+
 import { Button } from '~/components/ui/button';
 import {
   Card,
@@ -13,17 +15,28 @@ import {
 import { Input } from '~/components/ui/input';
 import { Label } from '~/components/ui/label';
 
+import { createFeature } from '~/services/api-service';
+
+import { toast } from 'sonner';
+
 function FeatureRequestForm() {
   const [title, setTitle] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setIsSubmitting(true);
-    setTimeout(() => {
+    try {
+      await createFeature(title);
+      toast.success('Feature request submitted successfully!');
+      navigate(0);
+    } catch (error) {
+      toast.error('Failed to submit feature request.');
+    } finally {
       setTitle('');
       setIsSubmitting(false);
-    }, 3000);
+    }
   }
 
   return (

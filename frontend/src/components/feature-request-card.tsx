@@ -1,6 +1,4 @@
-'use client';
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Heart } from 'lucide-react';
 import { Button } from '~/components/ui/button';
 import {
@@ -12,6 +10,9 @@ import {
 import { Shimmer } from '~/components/ui/shimmer';
 
 import { formatDate } from '~/lib/utils';
+
+import { getFeatureById, toggleLikeFeature } from '~/services/api-service';
+import { toast } from 'sonner';
 
 export interface FeatureRequest {
   id: number;
@@ -50,11 +51,33 @@ interface LikeButtonProps {
 
 function LikeButton({ id }: LikeButtonProps) {
   const [isLiked, setIsLiked] = useState(false);
-  const isLoading = false;
+  const [isLoading, setIsLoading] = useState(false);
+  const [refetch, setRefetch] = useState(0);
 
-  function handleLikeToggle() {
+  useEffect(() => {
+    setIsLoading(true);
+    getFeatureById(id)
+      .then((response) => {
+        setIsLiked(response.data?.feature.liked ?? false);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [refetch]);
+
+  async function handleLikeToggle() {
+    if (isLoading) return;
+
     const newLikedState = !isLiked;
-    setIsLiked(newLikedState);
+    try {
+      setIsLoading(true);
+      await toggleLikeFeature(id, newLikedState);
+    } catch (error) {
+      toast.error('Error toggling like:');
+    } finally {
+      setIsLoading(false);
+      setRefetch((prev) => prev + 1);
+    }
   }
 
   return (

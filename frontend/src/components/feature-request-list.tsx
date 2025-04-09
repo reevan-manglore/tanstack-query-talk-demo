@@ -1,74 +1,73 @@
+import { useEffect, useState } from 'react';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 
 import { cn } from '~/lib/utils';
+
 import FeatureRequestCard, {
   FeatureRequestSkeleton,
 } from '~/components/feature-request-card';
+import { Feature, getFeatures } from '~/services/api-service';
+import useGetSearchParam from '~/hooks/use-get-search-param';
 
-const featureRequests = [
-  {
-    id: 1,
-    title: 'Add dark mode',
-    liked: false,
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: 2,
-    title: 'Improve search speed',
-    liked: false,
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: 3,
-    title: 'Better mobile support',
-    liked: false,
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: 4,
-    title: 'Add keyboard shortcuts',
-    liked: false,
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: 5,
-    title: 'Improve accessibility',
-    liked: false,
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: 6,
-    title: 'Add custom themes',
-    liked: false,
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: 7,
-    title: 'Integrate with third-party APIs',
-    liked: false,
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: 8,
-    title: 'Add user profiles',
-    liked: false,
-    createdAt: new Date().toISOString(),
-  },
-];
 function FeatureRequestList() {
   const [parentref] = useAutoAnimate({ easing: 'ease-out' });
 
+  const [featureRequests, setFeatureRequests] = useState<Feature[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [debugInfo, setDebugInfo] = useState<string | null>(null);
+  const search = useGetSearchParam();
+  useEffect(() => {
+    let isActive = true;
+    setIsLoading(true);
+    getFeatures(search)
+      .then((data) => {
+        if (!isActive) {
+          return;
+        }
+        setFeatureRequests(data.data?.features || []);
+        setDebugInfo(data.data?.requestIdentifier || null);
+        setIsLoading(false);
+        setError(null);
+      })
+      .catch((error) => {
+        console.error('Error fetching feature requests:', error);
+        setIsLoading(false);
+        setError('Failed to load feature requests');
+      });
+
+    return () => {
+      isActive = false;
+    };
+  }, [search]);
+
+  if (isLoading) {
+    return (
+      <div className="max-h-full overflow-y-auto">
+        {Array.from({ length: 5 }).map((_, index) => (
+          <FeatureRequestSkeleton key={index} />
+        ))}
+      </div>
+    );
+  }
+  if (error) {
+    return <FeatureRequestError error={error} />;
+  }
+
   return (
-    <div
-      ref={parentref}
-      className={cn(
-        'grid grid-cols-1 mt-4 space-y-4 max-h-full overflow-y-auto'
-      )}
-    >
-      {featureRequests.map((request) => (
-        <FeatureRequestCard key={request.id} request={request} />
-      ))}
-    </div>
+    <>
+      <DebugBanner debugInfo={debugInfo} search={search} />
+      <div
+        ref={parentref}
+        className={cn(
+          'grid grid-cols-1 mt-4 space-y-4 max-h-full overflow-y-auto'
+        )}
+      >
+        {featureRequests.map((request) => (
+          <FeatureRequestCard key={request.id} request={request} />
+        ))}
+      </div>
+    </>
   );
 }
 
