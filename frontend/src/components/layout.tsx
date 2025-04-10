@@ -1,5 +1,5 @@
 import { UserAvatar } from '~/components/user-avatar';
-import { Outlet } from 'react-router';
+import { Outlet, Link } from 'react-router';
 
 function Layout() {
   return (
@@ -9,9 +9,12 @@ function Layout() {
           <nav className="flex items-center justify-between">
             <div className="font-bold text-xl">Feature Requests</div>
             <div className="flex items-center gap-4">
-              <a href="/" className="text-sm font-medium">
+              <Link to="/" className="text-sm font-medium">
                 Dashboard
-              </a>
+              </Link>
+              <Link to="/about-us" className="text-sm font-medium">
+                About us
+              </Link>
               <UserAvatar />
             </div>
           </nav>

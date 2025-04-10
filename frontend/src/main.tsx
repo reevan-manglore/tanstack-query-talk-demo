@@ -6,6 +6,7 @@ import { Toaster } from '~/components/ui/sonner.tsx';
 import './styles/globals.css';
 import Layout from '~/components/layout';
 import Home from '~/pages/home';
+import AboutUs from '~/pages/about-us';
 
 createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
@@ -13,6 +14,7 @@ createRoot(document.getElementById('root')!).render(
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
+        <Route path="about-us" element={<AboutUs />} />
       </Route>
     </Routes>
   </BrowserRouter>
