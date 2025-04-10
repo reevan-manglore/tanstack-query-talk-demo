@@ -83,12 +83,22 @@ const standardResponse = (success, data, message = "") => {
 const randomDelay = () =>
   new Promise((resolve) => setTimeout(resolve, Math.random() * 1000 + 500));
 
+// More extreme random delay specifically for demonstrating race conditions
+const raceConditionDelay = () =>
+  new Promise((resolve) => setTimeout(resolve, Math.random() * 3000 + 1000)); // 1-4 seconds delay
+
 // GET /features - Fetch features with optional search
 app.get("/features", async (req, res) => {
-  await randomDelay(); // Add delay to trigger race conditions
+  const searchTerm = req.query.search || "";
+
+  // Use the more extreme delay to demonstrate race conditions
+  await raceConditionDelay();
+
   await db.read(); // Refresh data
 
-  const searchTerm = req.query.search || "";
+  // Add search param to response to help identify which response belongs to which request
+  const requestIdentifier = searchTerm ? `search:${searchTerm}` : "all";
+
   const features = db.data.features.filter((f) =>
     f.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -99,8 +109,8 @@ app.get("/features", async (req, res) => {
   res.json(
     standardResponse(
       true,
-      { features: sortedFeatures },
-      "Features retrieved successfully"
+      { features: sortedFeatures, requestIdentifier },
+      `Features retrieved successfully for request: ${requestIdentifier}`
     )
   );
 });

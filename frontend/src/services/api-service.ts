@@ -32,6 +32,7 @@ async function handleResponse<T>(
 // GET /features
 export interface FeaturesResponse {
   features: Feature[];
+  requestIdentifier?: string; // Added to help visualize race conditions
 }
 
 export async function getFeatures(
