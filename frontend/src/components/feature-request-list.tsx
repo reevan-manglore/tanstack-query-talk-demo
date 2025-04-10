@@ -103,7 +103,7 @@ export function DebugBanner({
     <>
       {debugInfo && (
         <p className="text-xs text-purple-600 mb-2 p-2 bg-purple-100 rounded-md">
-          Last response came from: {debugInfo} (demonstrating race condition)
+          Last response came from: {debugInfo}
         </p>
       )}
       <p className="text-sm text-blue-600 mb-2">
