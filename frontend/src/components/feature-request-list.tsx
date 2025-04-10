@@ -91,3 +91,24 @@ export function FeatureRequestError({ error }: { error: string }) {
     <p className="text-red-500 text-center">{error}</p>
   </div>;
 }
+
+export function DebugBanner({
+  search,
+  debugInfo,
+}: {
+  search: string;
+  debugInfo: string | null;
+}) {
+  return (
+    <>
+      {debugInfo && (
+        <p className="text-xs text-purple-600 mb-2 p-2 bg-purple-100 rounded-md">
+          Last response came from: {debugInfo} (demonstrating race condition)
+        </p>
+      )}
+      <p className="text-sm text-blue-600 mb-2">
+        Showing results for: "{search}"
+      </p>
+    </>
+  );
+}
