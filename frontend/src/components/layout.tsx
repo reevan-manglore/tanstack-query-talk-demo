@@ -15,6 +15,9 @@ function Layout() {
               <Link to="/about-us" className="text-sm font-medium">
                 About us
               </Link>
+              <Link to="/counter" className="text-sm font-medium">
+                Counter
+              </Link>
               <UserAvatar />
             </div>
           </nav>
