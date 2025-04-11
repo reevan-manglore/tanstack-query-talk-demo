@@ -20,10 +20,9 @@ function FeatureRequestForm() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setIsSubmitting(true);
-    setTimeout(() => {
-      setTitle('');
-      setIsSubmitting(false);
-    }, 3000);
+    setTitle('');
+    await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate a network request
+    setIsSubmitting(false);
   }
 
   return (
